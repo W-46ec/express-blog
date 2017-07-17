@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%=title%></title>
+</head>
+<body>
+	<center>
+	<h1>title:<%=title%></h1>
+	</center>
+	content:<%=content%>
+	<br>
+	<% var editPath = "/users/edit.html?id=" + id + "&page=" + page; %>
+	<a href=<%=editPath%>>Edit</a>
+	<% var delPath = "/users/delete?id=" + id; %>
+	<a href=<%=delPath%>>Delete</a>
+	<br>
+	<% var returnPath = "/lists?page=" + page%>
+	<h5><a href=<%=returnPath%>>Return page <%=page%></a></h5>
+</body>
+</html>

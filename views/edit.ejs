@@ -1,0 +1,16 @@
+<html>
+<body>
+	<center>
+	<h1>Edit</h1>
+	<% var edit = "/users/edit?id=" + id%>
+	<form action=<%=edit%> method="POST">
+		title:<input type="text" name="title" value=<%=title%>><br/>
+		content:<textarea name="content"><%=content%></textarea> <br/>
+		<input type="submit" value="Edit">
+	</form>
+	<br><br>
+	<% var cancle = "/lists?page=" + page%>
+	<h5><a href=<%=cancle%>>Cancle</a></h5>
+	</center>
+</body>
+</html>
