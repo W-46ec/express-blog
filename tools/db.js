@@ -1,0 +1,115 @@
+var md5 = require('md5');
+
+var mongoClient = require('mongodb').MongoClient;
+var DB_CONN_STR = 'mongodb://127.0.0.1:27017/express-blog';
+var limitLists = 10;
+
+var tbUser = 'users';
+var tbBlog = 'blog';
+
+var findUser = function(query, callback){
+	mongoClient.connect(DB_CONN_STR,function(err,db){
+		var collection = db.collection(tbUser);
+		var whereStr = {"username":query};
+		collection.find(whereStr).toArray(function(err, result){
+			if(err){
+				console.log("Error:" + err);
+				return;
+			}
+			callback(result);
+		});
+	});
+}
+
+var blogDetail = function(query, callback){
+	mongoClient.connect(DB_CONN_STR,function(err,db){
+		var collection = db.collection(tbBlog);
+		var whereStr = {"id": query};
+		collection.find(whereStr).toArray(function(err, result){
+			if(err){
+				console.log("Error:" + err);
+				return;
+			}
+			callback(result);
+			db.close();
+		});
+	});
+}
+
+var list = function(page, callback){
+	mongoClient.connect(DB_CONN_STR,function(err,db){
+		var collection = db.collection(tbBlog);
+		var skip = (parseInt(page) - 1) * limitLists;
+		collection.find({}).limit(limitLists).skip(skip).toArray(function(err, result){
+			if(err){
+				console.log("Error:" + err);
+				return;
+			}
+			callback(result);
+			db.close();
+		});
+	});
+}
+
+var addBlog = function(query, callback){
+	mongoClient.connect(DB_CONN_STR,function(err,db){
+		var collection = db.collection(tbBlog);
+		var username = "admin";
+		var title = query.title;
+		var content = query.content;
+		var date = new Date().toLocaleString();
+		var id = md5(username + title + content + data);
+		var data = [{username: username, title: title, content: content, date: date, id: id}];
+		collection.insert(data,function(err,result){
+			if(err){
+				console.log("Error:" + err);
+				return;
+			}
+			callback(result);
+			db.close();
+		});
+	});
+}
+
+var updateBlog = function(id, query, callback){
+	mongoClient.connect(DB_CONN_STR,function(err,db){
+		var collection = db.collection(tbBlog);
+		var whereStr = {"id":id};
+		var updateStr = {$set:{title: query.title, content: query.content}};
+		collection.update(whereStr, updateStr, function(err,result){
+			if(err){
+				console.log("Error:" + err);
+				return;
+			}
+			callback(result);
+			db.close();
+		})
+	});
+}
+
+var deleteBlog = function(id, callback){
+	mongoClient.connect(DB_CONN_STR,function(err,db){
+		var collection = db.collection(tbBlog);
+		var whereStr = {"id": id};
+		collection.deleteOne(whereStr, function(err,result){
+			if(err){
+				console.log('Error:' + err);
+				return;
+			}
+			callback(result);
+			db.close();
+		});
+	});
+}
+
+module.exports = {
+	mongoClient: mongoClient,
+	DB_CONN_STR: DB_CONN_STR,
+	limitLists: limitLists,
+	findUser: findUser,
+	addBlog: addBlog,
+	blogDetail: blogDetail,
+	list: list,
+	updateBlog: updateBlog,
+	deleteBlog: deleteBlog
+}

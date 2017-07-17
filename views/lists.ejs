@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Lists</title>
+</head>
+<body>
+	<h1>Blog Lists: </h1>
+	<ul>
+		<% lists.forEach(function(element,index,its){ %>
+		<% var path = "/detail?id=" + element.id + "&page=" + page; %>
+		<li>
+			<a href=<%=path%>><%= element.title %></a> 
+		</li>
+		<% }); %>
+	</ul>
+	<br>
+	<% var lastPage = "/lists?page=" + (page - 1).toString(); %>
+	<li><a href=<%=lastPage%>>last page</a></li>
+	<% var nextPage = "/lists?page=" + (page + num).toString(); %>
+	<li><a href=<%=nextPage%>>next page</a></li>
+	<br><br>
+	<h5>Page : <%=page%></h5>
+	<br><br>
+	<h5><a href="/users/new.html">NEW</a></h5>
+</body>
+</html>
