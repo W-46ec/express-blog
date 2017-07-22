@@ -2,15 +2,23 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title><%=title%></title>
+	<title><%=result.title%></title>
 </head>
 <body>
 	<center>
-	<h1>title:<%=title%></h1>
+	<h2>Title:<%=result.title%></h2>
+	
+	Author:<%=result.username%>
 	</center>
-	content:<%=content%>
+	<br>
+	Content:
+	<div>
+		<%=result.content%>
+	</div>
 	<br>
 	<% var editPath = "/users/edit.html?id=" + id + "&page=" + page; %>
+	<%=result.date%>
+	<br><br>
 	<a href=<%=editPath%>>Edit</a>
 	<% var delPath = "/users/delete?id=" + id; %>
 	<a href=<%=delPath%>>Delete</a>

@@ -1,13 +1,15 @@
-var crypto = require('crypto');
-var md5 = crypto.createHash('md5');
+var sha256 = require('sha256');
 
-exports.authorizations = [];
+authorizations = [];
 
-exports.cookies = function(req, res, username){
-	md5 = crypto.createHash('md5');
-	md5.update(username + (new Date()).toString());
-	var auth = md5.digest('hex');
-	exports.authorizations.push({username: username, auth: auth});
-	res.cookie('username', username, {maxAge: 60 * 60 * 1000});
+cookies = function(req, res, body){
+	var auth = sha256(body.username + (new Date()).toString() + body.pwd);
+	authorizations.push({username: body.username, auth: auth});
+	res.cookie('username', body.username, {maxAge: 60 * 60 * 1000});
 	res.cookie('auth', auth, {maxAge: 60 * 60 * 1000});
+}
+
+module.exports = {
+	authorizations: authorizations,
+	cookies: cookies
 }
