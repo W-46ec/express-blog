@@ -1,6 +1,7 @@
 var express = require('express');
 var check = require('../tools/check.js');
 var mdb = require('../tools/db.js');
+var message = require('../tools/msg.js');
 
 var mongoClient = mdb.mongoClient;
 var DB_CONN_STR = mdb.DB_CONN_STR;
@@ -26,12 +27,7 @@ router.get('/lists', function(req, res, next) {
 		}
 		mdb.list(req.query.page, function(err, result){
 			if(err){
-				res.status(500);
-				res.render('msg', {
-					title: 'Error', 
-					text: 'Error!', 
-					path: '/lists'
-				});
+				message.dbError(res);
 				return;
 			}
 			if(req.query.page === '1' && result.length === 0){
@@ -47,12 +43,7 @@ router.get('/lists', function(req, res, next) {
 			check.checkNextPage(res, req, result, function(){
 				mdb.list((parseInt(req.query.page) + 1).toString(), function(err, result2){
 					if(err){
-						res.status(500);
-						res.render('msg', {
-							title: 'Error', 
-							text: 'Error!', 
-							path: '/lists'
-						});
+						message.dbError(res);
 						return;
 					}
 					var page = parseInt(req.query.page);
@@ -75,27 +66,18 @@ router.get('/lists', function(req, res, next) {
 router.get('/detail', function(req, res, next) {
 	mdb.blogDetail(req.query.id, function(err, result){
 		if(err){
-			res.status(500);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Error!', 
-				path: '/lists'
-			});
+			message.dbError(res);
 			return;
 		}
 		if(check.isValid(result)){
-			res.render('detail', {
+				res.render('detail', {
 				result: result[0],
-				page: req.query.page, 
+				page: check.checkPageIsLegal(req.query.page) ? 
+				req.query.page : '1',
 				id: req.query.id
 			});
 		} else {
-			res.status(404);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Not found!', 
-				path: '/lists'
-			});
+			message.error404(res);
 		}
 	});
 });

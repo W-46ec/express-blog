@@ -6,6 +6,7 @@ var crypto = require('crypto');
 var mdb = require('../tools/db.js');
 var auth = require('../tools/auth.js');
 var check = require('../tools/check.js');
+var message = require('../tools/msg.js');
 
 var mongoClient = mdb.mongoClient;
 var DB_CONN_STR = mdb.DB_CONN_STR;
@@ -42,12 +43,7 @@ router.get('/login.html', function(req, res, next) {
 router.post('/login', function(req, res, next) {
 	mdb.findUser(req.body.username, function(err, result){
 		if(err){
-			res.status(500);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Error!', 
-				path: '/lists'
-			});
+			message.dbError(res);
 			return;
 		}
 		if(result.length === 0){
@@ -99,24 +95,14 @@ router.get('/register.html', function(req, res, next) {
 router.post('/register', function(req, res, next) {
 	mdb.findUser(req.body.username, function(err, result){
 		if(err){
-			res.status(500);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Error!', 
-				path: '/lists'
-			});
+			message.dbError(res);
 			return;
 		}
 		if(result.length === 0){
 			if(sha256(req.body.pwd) === sha256(req.body.reconfirm)){
 				mdb.addUser(req.body, function(err, result){
 					if(err){
-						res.status(500);
-						res.render('msg', {
-							title: 'Error', 
-							text: 'Error!', 
-							path: '/lists'
-						});
+						message.dbError(res);
 						return;
 					}
 					if(check.isValid(result)){
@@ -127,12 +113,7 @@ router.post('/register', function(req, res, next) {
 							path: '/lists'
 						});
 					} else {
-						res.status(500);
-						res.render('msg', {
-							title: 'Error', 
-							text: 'Error!', 
-							path: '/lists'
-						});
+						message.dbError(res);
 					}
 				});
 			} else {
@@ -186,12 +167,7 @@ router.post('/new', function(req, res, next){
 	} else {
 		mdb.addBlog(req, function(err, result){
 			if(err){
-				res.status(500);
-				res.render('msg', {
-					title: 'Error', 
-					text: 'Error!', 
-					path: '/lists'
-				});
+				message.dbError(res);
 				return;
 			}
 			if(check.isValid(result)){
@@ -216,12 +192,7 @@ router.post('/new', function(req, res, next){
 router.get('/edit.html', function(req, res, next) {
 	mdb.blogDetail(req.query.id, function(err, result){
 		if(err){
-			res.status(500);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Error!', 
-				path: '/lists'
-			});
+			message.dbError(res);
 			return;
 		}
 		if(check.isValid(result)){
@@ -244,12 +215,7 @@ router.get('/edit.html', function(req, res, next) {
 				});
 			}
 		} else {
-			res.status(404);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Not found!', 
-				path: '/lists'
-			});
+			message.error404(res);
 		}
 	});
 });
@@ -258,24 +224,14 @@ router.get('/edit.html', function(req, res, next) {
 router.post('/edit', function(req, res, next){
 	mdb.blogDetail(req.query.id, function(err, result){
 		if(err){
-			res.status(500);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Error!', 
-				path: '/lists'
-			});
+			message.dbError(res);
 			return;
 		}
 		if(check.isValid(result)){
 			if(check.checkAuthor(req, result)){
 				mdb.updateBlog(req.query.id, req.body, function(err, result2){
 					if(err){
-						res.status(500);
-						res.render('msg', {
-							title: 'Error', 
-							text: 'Error!', 
-							path: '/lists'
-						});
+						message.dbError(res);
 						return;
 					}
 					if(check.isValid(result2)){
@@ -285,13 +241,7 @@ router.post('/edit', function(req, res, next){
 							path: '/lists'
 						});
 					} else {
-						console.log(typeof result2);
-						res.status(500);
-						res.render('msg', {
-							title: 'Error', 
-							text: 'Error!', 
-							path: '/lists'
-						});
+						message.dbError(res);
 					}
 				});
 			} else {
@@ -302,12 +252,7 @@ router.post('/edit', function(req, res, next){
 				});
 			}
 		} else {
-			res.status(404);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Not found!', 
-				path: '/lists'
-			});
+			message.error404(res);
 		}
 	});
 });
@@ -316,24 +261,14 @@ router.post('/edit', function(req, res, next){
 router.get('/delete', function(req, res, next){
 	mdb.blogDetail(req.query.id, function(err, result){
 		if(err){
-			res.status(500);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Error!', 
-				path: '/lists'
-			});
+			message.dbError(res);
 			return;
 		}
 		if(check.isValid(result)){
 			if(check.checkAuthor(req, result)){
 				mdb.deleteBlog(req.query.id, function(err, result2){
 					if(err){
-						res.status(500);
-						res.render('msg', {
-							title: 'Error', 
-							text: 'Error!', 
-							path: '/lists'
-						});
+						message.dbError(res);
 						return;
 					}
 					if(check.isValid(result2)){
@@ -343,12 +278,7 @@ router.get('/delete', function(req, res, next){
 							path: '/lists'
 						});
 					} else {
-						res.status(500);
-						res.render('msg', {
-							title: 'Error', 
-							text: 'Error!', 
-							path: '/lists'
-						});
+						message.dbError(res);
 					}
 				});
 			} else {
@@ -359,12 +289,7 @@ router.get('/delete', function(req, res, next){
 				});
 			}
 		} else {
-			res.status(404);
-			res.render('msg', {
-				title: 'Error', 
-				text: 'Not found!', 
-				path: '/lists'
-			});
+			message.error404(res);
 		}
 	});
 });
