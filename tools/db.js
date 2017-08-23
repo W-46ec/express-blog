@@ -1,8 +1,9 @@
 var sha256 = require('sha256');
 var uuid = require('uuid');
+var crypto = require('crypto');
 
 var mongoClient = require('mongodb').MongoClient;
-var DB_CONN_STR = 'mongodb://127.0.0.1:27017/express-blog';
+var DB_CONN_STR = 'mongodb://127.0.0.1:27017/blog';
 var limitLists = 10;	//每页显示博客条数
 
 var tbUser = 'users';
@@ -29,11 +30,20 @@ var addUser = function(query, callback){
 		var collection = db.collection(tbUser);
 		var username = query.username;
 		var salt = sha256(uuid.v4());
-		var pwd = sha256(query.pwd + salt);
+		//HMACSHA256方式加盐
+		var pwd = crypto.pbkdf2Sync(
+			query.pwd,
+			salt,
+			4096,	//迭代次数
+			256,	//生成密码长度
+			'sha256'
+		).toString('hex');
+		var date = new Date().toLocaleString();
 		var data = [{
 			username: username, 
 			pwd: pwd, 
-			salt: salt
+			salt: salt,
+			date: date
 		}];
 		collection.insert(data,function(err,result){
 			if(err){
