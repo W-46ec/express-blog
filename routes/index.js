@@ -24,10 +24,19 @@ router.get('/lists', function(req, res, next) {
 			loginUrl = "/users/login.html";
 			loginStat = "Login";
 		}
-		mdb.list(req.query.page, function(result){
+		mdb.list(req.query.page, function(err, result){
+			if(err){
+				res.status(500);
+				res.render('msg', {
+					title: 'Error', 
+					text: 'Error!', 
+					path: '/lists'
+				});
+				return;
+			}
 			if(req.query.page === '1' && result.length === 0){
 				res.render('lists', {
-					lists: [], 
+					lists: [],
 					page: 1,
 					num: 0,
 					loginStat: loginStat, 
@@ -36,7 +45,16 @@ router.get('/lists', function(req, res, next) {
 				return;
 			}
 			check.checkNextPage(res, req, result, function(){
-				mdb.list((parseInt(req.query.page) + 1).toString(), function(result2){
+				mdb.list((parseInt(req.query.page) + 1).toString(), function(err, result2){
+					if(err){
+						res.status(500);
+						res.render('msg', {
+							title: 'Error', 
+							text: 'Error!', 
+							path: '/lists'
+						});
+						return;
+					}
 					var page = parseInt(req.query.page);
 					res.render('lists', {
 						lists: [], 
@@ -55,7 +73,16 @@ router.get('/lists', function(req, res, next) {
 
 //博客详情页
 router.get('/detail', function(req, res, next) {
-	mdb.blogDetail(req.query.id, function(result){
+	mdb.blogDetail(req.query.id, function(err, result){
+		if(err){
+			res.status(500);
+			res.render('msg', {
+				title: 'Error', 
+				text: 'Error!', 
+				path: '/lists'
+			});
+			return;
+		}
 		if(check.isValid(result)){
 			res.render('detail', {
 				result: result[0],

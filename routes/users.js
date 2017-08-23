@@ -40,7 +40,16 @@ router.get('/login.html', function(req, res, next) {
 
 //登陆操作
 router.post('/login', function(req, res, next) {
-	mdb.findUser(req.body.username, function(result){
+	mdb.findUser(req.body.username, function(err, result){
+		if(err){
+			res.status(500);
+			res.render('msg', {
+				title: 'Error', 
+				text: 'Error!', 
+				path: '/lists'
+			});
+			return;
+		}
 		if(result.length === 0){
 			res.render('msg', {
 				title: 'Wrong', 
@@ -88,10 +97,28 @@ router.get('/register.html', function(req, res, next) {
 
 //注册操作
 router.post('/register', function(req, res, next) {
-	mdb.findUser(req.body.username, function(result){
+	mdb.findUser(req.body.username, function(err, result){
+		if(err){
+			res.status(500);
+			res.render('msg', {
+				title: 'Error', 
+				text: 'Error!', 
+				path: '/lists'
+			});
+			return;
+		}
 		if(result.length === 0){
 			if(sha256(req.body.pwd) === sha256(req.body.reconfirm)){
-				mdb.addUser(req.body, function(result){
+				mdb.addUser(req.body, function(err, result){
+					if(err){
+						res.status(500);
+						res.render('msg', {
+							title: 'Error', 
+							text: 'Error!', 
+							path: '/lists'
+						});
+						return;
+					}
 					if(check.isValid(result)){
 						auth.cookies(req, res, req.body);
 						res.render('msg', {
@@ -157,7 +184,16 @@ router.post('/new', function(req, res, next){
 			path: '/users/new.html'
 		});
 	} else {
-		mdb.addBlog(req, function(result){
+		mdb.addBlog(req, function(err, result){
+			if(err){
+				res.status(500);
+				res.render('msg', {
+					title: 'Error', 
+					text: 'Error!', 
+					path: '/lists'
+				});
+				return;
+			}
 			if(check.isValid(result)){
 				res.render('msg', {
 					title: 'Success', 
@@ -178,7 +214,16 @@ router.post('/new', function(req, res, next){
 
 //编辑博客页面
 router.get('/edit.html', function(req, res, next) {
-	mdb.blogDetail(req.query.id, function(result){
+	mdb.blogDetail(req.query.id, function(err, result){
+		if(err){
+			res.status(500);
+			res.render('msg', {
+				title: 'Error', 
+				text: 'Error!', 
+				path: '/lists'
+			});
+			return;
+		}
 		if(check.isValid(result)){
 			if(check.checkAuthor(req, result)){
 				var title = result[0].title;
@@ -211,10 +256,28 @@ router.get('/edit.html', function(req, res, next) {
 
 //编辑博客操作
 router.post('/edit', function(req, res, next){
-	mdb.blogDetail(req.query.id, function(result){
+	mdb.blogDetail(req.query.id, function(err, result){
+		if(err){
+			res.status(500);
+			res.render('msg', {
+				title: 'Error', 
+				text: 'Error!', 
+				path: '/lists'
+			});
+			return;
+		}
 		if(check.isValid(result)){
 			if(check.checkAuthor(req, result)){
-				mdb.updateBlog(req.query.id, req.body, function(result2){
+				mdb.updateBlog(req.query.id, req.body, function(err, result2){
+					if(err){
+						res.status(500);
+						res.render('msg', {
+							title: 'Error', 
+							text: 'Error!', 
+							path: '/lists'
+						});
+						return;
+					}
 					if(check.isValid(result2)){
 						res.render('msg', {
 							title: 'Success', 
@@ -251,10 +314,28 @@ router.post('/edit', function(req, res, next){
 
 //删除博客操作
 router.get('/delete', function(req, res, next){
-	mdb.blogDetail(req.query.id, function(result){
+	mdb.blogDetail(req.query.id, function(err, result){
+		if(err){
+			res.status(500);
+			res.render('msg', {
+				title: 'Error', 
+				text: 'Error!', 
+				path: '/lists'
+			});
+			return;
+		}
 		if(check.isValid(result)){
 			if(check.checkAuthor(req, result)){
-				mdb.deleteBlog(req.query.id, function(result2){
+				mdb.deleteBlog(req.query.id, function(err, result2){
+					if(err){
+						res.status(500);
+						res.render('msg', {
+							title: 'Error', 
+							text: 'Error!', 
+							path: '/lists'
+						});
+						return;
+					}
 					if(check.isValid(result2)){
 						res.render('msg', {
 							title: 'Success', 

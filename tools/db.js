@@ -15,11 +15,7 @@ var findUser = function(query, callback){
 		var collection = db.collection(tbUser);
 		var whereStr = {"username":query};
 		collection.find(whereStr).toArray(function(err, result){
-			if(err){
-				console.log("Error:" + err);
-				return;
-			}
-			callback(result);
+			callback(err, result);
 		});
 	});
 }
@@ -46,11 +42,7 @@ var addUser = function(query, callback){
 			date: date
 		}];
 		collection.insert(data,function(err,result){
-			if(err){
-				console.log("Error:" + err);
-				return;
-			}
-			callback(result);
+			callback(err, result);
 			db.close();
 		});
 	});
@@ -62,11 +54,7 @@ var blogDetail = function(query, callback){
 		var collection = db.collection(tbBlog);
 		var whereStr = {"id": query};
 		collection.find(whereStr).toArray(function(err, result){
-			if(err){
-				console.log("Error:" + err);
-				return;
-			}
-			callback(result);
+			callback(err, result);
 			db.close();
 		});
 	});
@@ -78,11 +66,7 @@ var list = function(page, callback){
 		var collection = db.collection(tbBlog);
 		var skip = (parseInt(page) - 1) * limitLists;
 		collection.find({}).limit(limitLists).skip(skip).toArray(function(err, result){
-			if(err){
-				console.log("Error:" + err);
-				return;
-			}
-			callback(result);
+			callback(err, result);
 			db.close();
 		});
 	});
@@ -106,11 +90,7 @@ var addBlog = function(req, callback){
 			id: id
 		}];
 		collection.insert(data,function(err,result){
-			if(err){
-				console.log("Error:" + err);
-				return;
-			}
-			callback(result);
+			callback(err, result);
 			db.close();
 		});
 	});
@@ -126,11 +106,7 @@ var updateBlog = function(id, query, callback){
 			content: query.content
 		}};
 		collection.update(whereStr, updateStr, function(err,result){
-			if(err){
-				console.log("Error:" + err);
-				return;
-			}
-			callback(result);
+			callback(err, result);
 			db.close();
 		})
 	});
@@ -142,11 +118,7 @@ var deleteBlog = function(id, callback){
 		var collection = db.collection(tbBlog);
 		var whereStr = {"id": id};
 		collection.deleteOne(whereStr, function(err,result){
-			if(err){
-				console.log('Error:' + err);
-				return;
-			}
-			callback(result);
+			callback(err, result);
 			db.close();
 		});
 	});
