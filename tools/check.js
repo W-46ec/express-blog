@@ -1,4 +1,5 @@
 var mdb = require('../tools/db.js');
+var auth = require('../tools/auth.js')
 
 var limitLists = mdb.limitLists;
 
@@ -62,8 +63,8 @@ var checkNextPage = function(res, req, result, callback){
 }
 
 var isLogin = function(req){
-	if((authorizations.some(e => e.username === req.cookies.username))
-	 && (authorizations.some(e => e.auth === req.cookies.auth))){
+	if((auth.authorizations.some(e => e.username === req.cookies.username))
+	 && (auth.authorizations.some(e => e.auth === req.cookies.auth))){
 		return true;
 	} else {
 		return false;
