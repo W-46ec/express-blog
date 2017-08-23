@@ -13,19 +13,7 @@ var DB_CONN_STR = mdb.DB_CONN_STR;
 
 var router = express.Router();
 
-router.get('/*', function(req, res, next){
-	if(check.checkBody(req.body)){
-		next();
-	} else {
-		res.status(500);
-		res.render('msg', {
-			title: 'Error', 
-			text: 'Error!', 
-			path: '/users/login.html'
-		});
-	}
-});
-
+//登陆页面
 router.get('/', function(req, res, next) {
 	res.redirect('/users/login.html');
 });
@@ -81,6 +69,13 @@ router.post('/login', function(req, res, next) {
 
 //注销操作
 router.get('/logout', function(req, res, next) {
+	for(var i = 0; i < auth.authorizations.length; i++){
+		if(auth.authorizations[i].username === req.cookies.username &&
+			auth.authorizations[i].auth === req.cookies.auth){
+			auth.authorizations.splice(i,1);
+			break;
+		}
+	}
 	res.clearCookie('auth');
 	res.clearCookie('username');
 	res.redirect('/lists');

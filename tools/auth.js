@@ -1,4 +1,6 @@
 var sha256 = require('sha256');
+var crypto = require('crypto');
+var uuid = require('uuid');
 
 authorizations = [];
 
@@ -13,9 +15,15 @@ cookies = function(req, res, body){
 			}
 		}
 	}
-	var auth = sha256(body.username + (new Date()).toString() + body.pwd);
+	var auth = crypto.pbkdf2Sync(
+		sha256(body.username + (new Date()).toString() + body.pwd),
+		sha256(uuid.v4()),
+		4096,
+		256,
+		'sha256'
+	).toString('hex');
 	authorizations.push({
-		username: body.username, 
+		username: body.username,
 		auth: auth,
 		date: +(new Date())
 	});

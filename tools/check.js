@@ -5,7 +5,7 @@ var limitLists = mdb.limitLists;
 
 //检测请求是否合法
 var checkBody = function(body){
-	if(body === 'undefined'){
+	if(body === undefined){
 		return false;
 	} else {
 		return true;
