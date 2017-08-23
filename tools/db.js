@@ -3,11 +3,12 @@ var uuid = require('uuid');
 
 var mongoClient = require('mongodb').MongoClient;
 var DB_CONN_STR = 'mongodb://127.0.0.1:27017/express-blog';
-var limitLists = 10;
+var limitLists = 10;	//每页显示博客条数
 
 var tbUser = 'users';
 var tbBlog = 'blog';
 
+//查找用户
 var findUser = function(query, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbUser);
@@ -22,6 +23,7 @@ var findUser = function(query, callback){
 	});
 }
 
+//添加用户
 var addUser = function(query, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbUser);
@@ -44,6 +46,7 @@ var addUser = function(query, callback){
 	});
 }
 
+//查询博客详情
 var blogDetail = function(query, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbBlog);
@@ -59,6 +62,7 @@ var blogDetail = function(query, callback){
 	});
 }
 
+//首页查询
 var list = function(page, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbBlog);
@@ -74,6 +78,7 @@ var list = function(page, callback){
 	});
 }
 
+//添加博客
 var addBlog = function(req, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbBlog);
@@ -101,6 +106,7 @@ var addBlog = function(req, callback){
 	});
 }
 
+//修改博客
 var updateBlog = function(id, query, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbBlog);
@@ -120,6 +126,7 @@ var updateBlog = function(id, query, callback){
 	});
 }
 
+//删除博客
 var deleteBlog = function(id, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbBlog);

@@ -8,10 +8,12 @@ var limitLists = mdb.limitLists;
 
 var router = express.Router();
 
+//主页
 router.get('/', function(req, res, next) {
 	res.redirect('/lists');
 });
 
+//主页
 router.get('/lists', function(req, res, next) {
 	if(check.checkPageIsLegal(req.query.page)){
 		var loginStat,loginUrl;
@@ -41,6 +43,7 @@ router.get('/lists', function(req, res, next) {
 	}
 });
 
+//博客详情页
 router.get('/detail', function(req, res, next) {
 	mdb.blogDetail(req.query.id, function(result){
 		if(check.isValid(result)){

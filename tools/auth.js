@@ -2,6 +2,7 @@ var sha256 = require('sha256');
 
 authorizations = [];
 
+//生成Cookie
 cookies = function(req, res, body){
 	var auth = sha256(body.username + (new Date()).toString() + body.pwd);
 	authorizations.push({username: body.username, auth: auth});
