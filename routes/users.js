@@ -53,16 +53,67 @@ router.get('/edit.html', function(req, res, next) {
 	if(check.isLogin(req)){
 		mdb.blogDetail(req.query.id, function(result){
 			if(check.isValid(result)){
-				var title = result[0].title;
-				var content = result[0].content;
-				var page = req.query.page;
-				var id = req.query.id;
-				res.render('edit', {
-					title: title, 
-					content: content, 
-					page: page, 
-					id: id
+				if(check.checkAuthor(req, result)){
+					var title = result[0].title;
+					var content = result[0].content;
+					var page = req.query.page;
+					var id = req.query.id;
+					res.render('edit', {
+						title: title, 
+						content: content, 
+						page: page, 
+						id: id
+					});
+				} else {
+					res.render('msg', {
+						title: 'Access denied', 
+						text: 'Access denied!', 
+						path: '/lists'
+					});
+				}
+			} else {
+				res.status(404);
+				res.render('msg', {
+					title: 'Error', 
+					text: 'Not found!', 
+					path: '/lists'
 				});
+			}
+		});
+	} else {
+		res.redirect("/users/login.html");
+	}
+});
+
+router.post('/edit', function(req, res, next){
+	if(check.isLogin(req)){
+		mdb.blogDetail(req.query.id, function(result){
+			if(check.isValid(result)){
+				if(check.checkAuthor(req, result)){
+					mdb.updateBlog(req.query.id, req.body, function(result2){
+						if(check.isValid(result2)){
+							res.render('msg', {
+								title: 'Success', 
+								text: 'Success!', 
+								path: '/lists'
+							});
+						} else {
+							console.log(typeof result2);
+							res.status(500);
+							res.render('msg', {
+								title: 'Error', 
+								text: 'Error!', 
+								path: '/lists'
+							});
+						}
+					});
+				} else {
+					res.render('msg', {
+						title: 'Access denied', 
+						text: 'Access denied!', 
+						path: '/lists'
+					});
+				}
 			} else {
 				res.status(404);
 				res.render('msg', {
@@ -217,49 +268,6 @@ router.post('/new', function(req, res, next){
 				}
 			});
 		}
-	} else {
-		res.redirect("/users/login.html");
-	}
-});
-
-router.post('/edit', function(req, res, next){
-	if(check.isLogin(req)){
-		mdb.blogDetail(req.query.id, function(result){
-			if(check.isValid(result)){
-				if(check.checkAuthor(req, result)){
-					mdb.updateBlog(req.query.id, req.body, function(result2){
-						if(check.isValid(result2)){
-							res.render('msg', {
-								title: 'Success', 
-								text: 'Success!', 
-								path: '/lists'
-							});
-						} else {
-							console.log(typeof result2);
-							res.status(500);
-							res.render('msg', {
-								title: 'Error', 
-								text: 'Error!', 
-								path: '/lists'
-							});
-						}
-					});
-				} else {
-					res.render('msg', {
-						title: 'Access denied', 
-						text: 'Access denied!', 
-						path: '/lists'
-					});
-				}
-			} else {
-				res.status(404);
-				res.render('msg', {
-					title: 'Error', 
-					text: 'Not found!', 
-					path: '/lists'
-				});
-			}
-		});
 	} else {
 		res.redirect("/users/login.html");
 	}
