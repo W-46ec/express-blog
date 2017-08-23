@@ -3,15 +3,14 @@ var path = require('path');
 var sha256 = require('sha256');
 
 var mdb = require('../tools/db.js');
-var auth = require('../tools/auth.js')
-var check = require('../tools/check.js')
+var auth = require('../tools/auth.js');
+var check = require('../tools/check.js');
 
 var mongoClient = mdb.mongoClient;
 var DB_CONN_STR = mdb.DB_CONN_STR;
 
 var router = express.Router();
 
-/* GET users listing. */
 router.get('/*', function(req, res, next){
 	if(check.checkBody(req.body)){
 		next();
@@ -29,6 +28,7 @@ router.get('/', function(req, res, next) {
 	res.redirect('/users/login.html');
 });
 
+//登陆页面
 router.get('/login.html', function(req, res, next) {
 	if(check.isLogin(req)){
 		res.redirect('/lists');
@@ -37,145 +37,7 @@ router.get('/login.html', function(req, res, next) {
 	}
 });
 
-router.get('/register.html', function(req, res, next) {
-	res.render('register');
-});
-
-router.get('/new.html', function(req, res, next) {
-	if(check.isLogin(req)){
-		res.render('new');
-	} else {
-		res.redirect("/users/login.html");
-	}
-});
-
-router.get('/edit.html', function(req, res, next) {
-	if(check.isLogin(req)){
-		mdb.blogDetail(req.query.id, function(result){
-			if(check.isValid(result)){
-				if(check.checkAuthor(req, result)){
-					var title = result[0].title;
-					var content = result[0].content;
-					var page = req.query.page;
-					var id = req.query.id;
-					res.render('edit', {
-						title: title, 
-						content: content, 
-						page: page, 
-						id: id
-					});
-				} else {
-					res.render('msg', {
-						title: 'Access denied', 
-						text: 'Access denied!', 
-						path: '/lists'
-					});
-				}
-			} else {
-				res.status(404);
-				res.render('msg', {
-					title: 'Error', 
-					text: 'Not found!', 
-					path: '/lists'
-				});
-			}
-		});
-	} else {
-		res.redirect("/users/login.html");
-	}
-});
-
-router.post('/edit', function(req, res, next){
-	if(check.isLogin(req)){
-		mdb.blogDetail(req.query.id, function(result){
-			if(check.isValid(result)){
-				if(check.checkAuthor(req, result)){
-					mdb.updateBlog(req.query.id, req.body, function(result2){
-						if(check.isValid(result2)){
-							res.render('msg', {
-								title: 'Success', 
-								text: 'Success!', 
-								path: '/lists'
-							});
-						} else {
-							console.log(typeof result2);
-							res.status(500);
-							res.render('msg', {
-								title: 'Error', 
-								text: 'Error!', 
-								path: '/lists'
-							});
-						}
-					});
-				} else {
-					res.render('msg', {
-						title: 'Access denied', 
-						text: 'Access denied!', 
-						path: '/lists'
-					});
-				}
-			} else {
-				res.status(404);
-				res.render('msg', {
-					title: 'Error', 
-					text: 'Not found!', 
-					path: '/lists'
-				});
-			}
-		});
-	} else {
-		res.redirect("/users/login.html");
-	}
-});
-
-router.get('/delete', function(req, res, next){
-	if(check.isLogin(req)){
-		mdb.blogDetail(req.query.id, function(result){
-			if(check.isValid(result)){
-				if(check.checkAuthor(req, result)){
-					mdb.deleteBlog(req.query.id, function(result2){
-						if(check.isValid(result2)){
-							res.render('msg', {
-								title: 'Success', 
-								text: 'Success!', 
-								path: '/lists'
-							});
-						} else {
-							res.status(500);
-							res.render('msg', {
-								title: 'Error', 
-								text: 'Error!', 
-								path: '/lists'
-							});
-						}
-					});
-				} else {
-					res.render('msg', {
-						title: 'Access denied', 
-						text: 'Access denied!', 
-						path: '/lists'
-					});
-				}
-			} else {
-				res.status(404);
-				res.render('msg', {
-					title: 'Error', 
-					text: 'Not found!', 
-					path: '/lists'
-				});
-			}
-		});
-	} else {
-		res.redirect("/users/login.html");
-	}
-});
-
-router.get('/logout', function(req, res, next) {
-	res.clearCookie('auth');
-	res.clearCookie('username');
-	res.redirect('/lists');
-});
-
+//登陆操作
 router.post('/login', function(req, res, next) {
 	mdb.findUser(req.body.username, function(result){
 		if(result.length === 0){
@@ -204,6 +66,19 @@ router.post('/login', function(req, res, next) {
 	});
 });
 
+//注销操作
+router.get('/logout', function(req, res, next) {
+	res.clearCookie('auth');
+	res.clearCookie('username');
+	res.redirect('/lists');
+});
+
+//注册页面
+router.get('/register.html', function(req, res, next) {
+	res.render('register');
+});
+
+//注册操作
 router.post('/register', function(req, res, next) {
 	mdb.findUser(req.body.username, function(result){
 		if(result.length === 0){
@@ -242,35 +117,167 @@ router.post('/register', function(req, res, next) {
 	});
 });
 
-router.post('/new', function(req, res, next){
+//GET请求登陆检测
+router.get('/*', function(req, res, next) {
 	if(check.isLogin(req)){
-		if(req.body.title.trim().length === 0 || req.body.content.trim().length === 0){
-			res.render('msg', {
-				title: 'Wrong', 
-				text: 'Title and content cannot be empty!', 
-				path: '/users/new.html'
-			});
+		next();
+	} else {
+		res.redirect('/users/login.html');
+	}
+});
+
+//POST请求登陆检测
+router.post('/*', function(req, res, next) {
+	if(check.isLogin(req)){
+		next();
+	} else {
+		res.redirect('/users/login.html');
+	}
+});
+
+//新增博客页面
+router.get('/new.html', function(req, res, next) {
+	res.render('new');
+});
+
+//新增博客操作
+router.post('/new', function(req, res, next){
+	if(req.body.title.trim().length === 0 || req.body.content.trim().length === 0){
+		res.render('msg', {
+			title: 'Wrong', 
+			text: 'Title and content cannot be empty!', 
+			path: '/users/new.html'
+		});
+	} else {
+		mdb.addBlog(req, function(result){
+			if(check.isValid(result)){
+				res.render('msg', {
+					title: 'Success', 
+					text: 'Success!', 
+					path: '/lists'
+				});
+			} else {
+				res.status(500);
+				res.render('msg', {
+					title: 'Error', 
+					text: 'Error!', 
+					path: '/lists'
+				});
+			}
+		});
+	}
+});
+
+//编辑博客页面
+router.get('/edit.html', function(req, res, next) {
+	mdb.blogDetail(req.query.id, function(result){
+		if(check.isValid(result)){
+			if(check.checkAuthor(req, result)){
+				var title = result[0].title;
+				var content = result[0].content;
+				var page = req.query.page;
+				var id = req.query.id;
+				res.render('edit', {
+					title: title, 
+					content: content, 
+					page: page, 
+					id: id
+				});
+			} else {
+				res.render('msg', {
+					title: 'Access denied', 
+					text: 'Access denied!', 
+					path: '/lists'
+				});
+			}
 		} else {
-			mdb.addBlog(req, function(result){
-				if(check.isValid(result)){
-					res.render('msg', {
-						title: 'Success', 
-						text: 'Success!', 
-						path: '/lists'
-					});
-				} else {
-					res.status(500);
-					res.render('msg', {
-						title: 'Error', 
-						text: 'Error!', 
-						path: '/lists'
-					});
-				}
+			res.status(404);
+			res.render('msg', {
+				title: 'Error', 
+				text: 'Not found!', 
+				path: '/lists'
 			});
 		}
-	} else {
-		res.redirect("/users/login.html");
-	}
+	});
+});
+
+//编辑博客操作
+router.post('/edit', function(req, res, next){
+	mdb.blogDetail(req.query.id, function(result){
+		if(check.isValid(result)){
+			if(check.checkAuthor(req, result)){
+				mdb.updateBlog(req.query.id, req.body, function(result2){
+					if(check.isValid(result2)){
+						res.render('msg', {
+							title: 'Success', 
+							text: 'Success!', 
+							path: '/lists'
+						});
+					} else {
+						console.log(typeof result2);
+						res.status(500);
+						res.render('msg', {
+							title: 'Error', 
+							text: 'Error!', 
+							path: '/lists'
+						});
+					}
+				});
+			} else {
+				res.render('msg', {
+					title: 'Access denied', 
+					text: 'Access denied!', 
+					path: '/lists'
+				});
+			}
+		} else {
+			res.status(404);
+			res.render('msg', {
+				title: 'Error', 
+				text: 'Not found!', 
+				path: '/lists'
+			});
+		}
+	});
+});
+
+//删除博客操作
+router.get('/delete', function(req, res, next){
+	mdb.blogDetail(req.query.id, function(result){
+		if(check.isValid(result)){
+			if(check.checkAuthor(req, result)){
+				mdb.deleteBlog(req.query.id, function(result2){
+					if(check.isValid(result2)){
+						res.render('msg', {
+							title: 'Success', 
+							text: 'Success!', 
+							path: '/lists'
+						});
+					} else {
+						res.status(500);
+						res.render('msg', {
+							title: 'Error', 
+							text: 'Error!', 
+							path: '/lists'
+						});
+					}
+				});
+			} else {
+				res.render('msg', {
+					title: 'Access denied', 
+					text: 'Access denied!', 
+					path: '/lists'
+				});
+			}
+		} else {
+			res.status(404);
+			res.render('msg', {
+				title: 'Error', 
+				text: 'Not found!', 
+				path: '/lists'
+			});
+		}
+	});
 });
 
 module.exports = router;
