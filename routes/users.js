@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var sha256 = require('sha256');
+var crypto = require('crypto');
 
 var mdb = require('../tools/db.js');
 var auth = require('../tools/auth.js');
@@ -47,7 +48,14 @@ router.post('/login', function(req, res, next) {
 				path: '/users/login.html'
 			});
 		} else {
-			var pwdSalt = sha256(req.body.pwd + result[0].salt);
+			//HMACSHA256方式加盐
+			var pwdSalt = crypto.pbkdf2Sync(
+				req.body.pwd,
+				result[0].salt,
+				4096,	//迭代次数
+				256,	//生成密码长度
+				'sha256'
+			).toString('hex');
 			if(result[0].pwd === pwdSalt){
 				auth.cookies(req, res, req.body);
 				res.render('msg', {
