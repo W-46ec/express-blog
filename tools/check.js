@@ -1,5 +1,5 @@
 var mdb = require('../tools/db.js');
-var auth = require('../tools/auth.js')
+var auth = require('../tools/auth.js');
 
 var limitLists = mdb.limitLists;
 

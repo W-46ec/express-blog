@@ -1,5 +1,5 @@
 var express = require('express');
-var check = require('../tools/check.js')
+var check = require('../tools/check.js');
 var mdb = require('../tools/db.js');
 
 var mongoClient = mdb.mongoClient;
@@ -8,7 +8,6 @@ var limitLists = mdb.limitLists;
 
 var router = express.Router();
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
 	res.redirect('/lists');
 });
