@@ -9,6 +9,24 @@ var limitLists = mdb.limitLists;
 
 var router = express.Router();
 
+//GET请求过滤
+router.get('/*', function(req, res, next){
+	if(check.checkBody(req.body)){
+		next();
+	} else {
+		message.dbError(res);
+	}
+});
+
+//POST请求过滤
+router.post('/*', function(req, res, next){
+	if(check.checkBody(req.body)){
+		next();
+	} else {
+		message.dbError(res);
+	}
+});
+
 //主页
 router.get('/', function(req, res, next) {
 	res.redirect('/lists');
