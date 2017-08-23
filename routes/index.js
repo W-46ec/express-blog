@@ -25,11 +25,21 @@ router.get('/lists', function(req, res, next) {
 			loginStat = "Login";
 		}
 		mdb.list(req.query.page, function(result){
+			if(req.query.page === '1' && result.length === 0){
+				res.render('lists', {
+					lists: [], 
+					page: 1,
+					num: 0,
+					loginStat: loginStat, 
+					loginUrl: loginUrl
+				});
+				return;
+			}
 			check.checkNextPage(res, req, result, function(){
 				mdb.list((parseInt(req.query.page) + 1).toString(), function(result2){
 					var page = parseInt(req.query.page);
 					res.render('lists', {
-						lists: result, 
+						lists: [], 
 						page: page, 
 						num: check.isValid(result2) ? 1 : 0,
 						loginStat: loginStat, 
