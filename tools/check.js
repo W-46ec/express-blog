@@ -3,6 +3,7 @@ var auth = require('../tools/auth.js');
 
 var limitLists = mdb.limitLists;
 
+//检测请求是否合法
 var checkBody = function(body){
 	if(body === 'undefined'){
 		return false;
@@ -11,6 +12,7 @@ var checkBody = function(body){
 	}
 }
 
+//检测首页page参数是否合法
 var checkPageIsLegal = function(page){
 	if(typeof(page) === 'undefined'){
 		return false;
@@ -25,18 +27,7 @@ var checkPageIsLegal = function(page){
 	}
 }
 
-var isValid = function(result){
-	if(result === undefined){
-		return false;
-	} else {
-		if(Object.keys(result).length === 0){
-			return 0;
-		} else {
-			return Object.keys(result).length;
-		}
-	}
-}
-
+//检测下一页
 var checkNextPage = function(res, req, result, callback){
 	if(isValid(result) === 0){
 		res.redirect("/lists?page=1");
@@ -62,6 +53,20 @@ var checkNextPage = function(res, req, result, callback){
 	}
 }
 
+//检测查询结果
+var isValid = function(result){
+	if(result === undefined){
+		return false;
+	} else {
+		if(Object.keys(result).length === 0){
+			return 0;
+		} else {
+			return Object.keys(result).length;
+		}
+	}
+}
+
+//登陆检测
 var isLogin = function(req){
 	if((auth.authorizations.some(e => e.username === req.cookies.username))
 	 && (auth.authorizations.some(e => e.auth === req.cookies.auth))){
@@ -71,6 +76,7 @@ var isLogin = function(req){
 	}
 }
 
+//用户身份检测
 var checkAuthor = function(req, result){
 	if(req.cookies.username === result[0].username){
 		return true;
