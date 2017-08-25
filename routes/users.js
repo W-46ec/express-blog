@@ -88,12 +88,18 @@ router.post('/register', function(req, res, next) {
 						message.dbError(res);
 						return;
 					}
-					if(check.isValid(result)){
-						auth.cookies(req, res, req.body);
-						message.succMsg(res);
-					} else {
-						message.dbError(res);
-					}
+					mdb.updateProfile(req.body.username, {}, function(err, result2){
+						if(err){
+							message.dbError(res);
+							return;
+						}
+						if(check.isValid(result)){
+							auth.cookies(req, res, req.body);
+							message.succMsg(res);
+						} else {
+							message.dbError(res);
+						}
+					});
 				});
 			} else {
 				message.message(
@@ -134,20 +140,19 @@ router.post('/*', function(req, res, next) {
 
 //新增博客页面
 router.get('/new.html', function(req, res, next) {
-	var loginStat,loginUrl,loginLogoClass;
+	var page = req.query.page;
+	var loginStat,loginUrl;
 	if(check.isLogin(req)){
 		loginUrl = "/users/logout";
-		loginStat = req.cookies.username;
-		loginLogoClass = '<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>';
+		loginStat = "Logout";
 	} else {
 		loginUrl = "/users/login.html";
-		loginStat = "个人主页";
-		loginLogoClass = '<i class="fa fa-user-circle-o fa-stack-1x fa-inverse"></i>';
+		loginStat = "Login";
 	}
 	res.render('new', {
 		loginStat: loginStat, 
 		loginUrl: loginUrl,
-		loginLogoClass: loginLogoClass
+		page: page
 	});
 });
 
@@ -184,15 +189,13 @@ router.get('/edit.html', function(req, res, next) {
 		}
 		if(check.isValid(result)){
 			if(check.checkAuthor(req, result)){
-				var loginStat,loginUrl,loginLogoClass;
+				var loginStat,loginUrl;
 				if(check.isLogin(req)){
 					loginUrl = "/users/logout";
-					loginStat = req.cookies.username;
-					loginLogoClass = '<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>';
+					loginStat = "Logout";
 				} else {
 					loginUrl = "/users/login.html";
-					loginStat = "个人主页";
-					loginLogoClass = '<i class="fa fa-user-circle-o fa-stack-1x fa-inverse"></i>';
+					loginStat = "Login";
 				}
 				var title = result[0].title;
 				var content = result[0].content;
@@ -201,7 +204,6 @@ router.get('/edit.html', function(req, res, next) {
 				res.render('edit', {
 					loginStat: loginStat,
 					loginUrl: loginUrl,
-					loginLogoClass: loginLogoClass,
 					title: title, 
 					content: content, 
 					page: page, 
@@ -255,6 +257,62 @@ router.get('/delete', function(req, res, next){
 		if(check.isValid(result)){
 			if(check.checkAuthor(req, result)){
 				mdb.deleteBlog(req.query.id, function(err, result2){
+					if(err){
+						message.dbError(res);
+						return;
+					}
+					if(check.isValid(result2)){
+						message.succMsg(res);
+					} else {
+						message.dbError(res);
+					}
+				});
+			} else {
+				message.accessDeniedMsg(res);
+			}
+		} else {
+			message.error404(res);
+		}
+	});
+});
+
+//个人信息页面
+router.get('/profile', function(req, res, next) {
+	mdb.getProfile(req.cookies.username, function(err, result){
+		if(err){
+			message.dbError(res);
+			return;
+		}
+		if(check.isValid(result)){
+			var loginStat,loginUrl;
+			if(check.isLogin(req)){
+				loginUrl = "/users/logout";
+				loginStat = "Logout";
+			} else {
+				loginUrl = "/users/login.html";
+				loginStat = "Login";
+			}
+			res.render('profile', {
+				loginStat: loginStat, 
+				loginUrl: loginUrl,
+				username: req.cookies.username,
+				result: result[0]
+			});
+		} else {
+			message.error404(res);
+		}
+	});
+});
+
+router.post('/save', function(req, res, next) {
+	mdb.getProfile(req.cookies.username, function(err, result){
+		if(err){
+			message.dbError(res);
+			return;
+		}
+		if(check.isValid(result)){
+			if(check.checkAuthor(req, result)){
+				mdb.updateProfile(req.cookies.username, req.body, function(err, result2){
 					if(err){
 						message.dbError(res);
 						return;

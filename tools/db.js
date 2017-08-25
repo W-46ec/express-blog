@@ -8,6 +8,7 @@ var limitLists = 10;	//每页显示博客条数
 
 var tbUser = 'users';
 var tbBlog = 'blog';
+var tbProfile = 'profile';
 
 //查找用户
 var findUser = function(query, callback){
@@ -45,6 +46,36 @@ var addUser = function(query, callback){
 			callback(err, result);
 			db.close();
 		});
+	});
+}
+
+//获取用户信息
+var getProfile = function(username, callback){
+	mongoClient.connect(DB_CONN_STR,function(err,db){
+		var collection = db.collection(tbProfile);
+		var whereStr = {"username": username};
+		collection.find(whereStr).toArray(function(err, result){
+			callback(err, result);
+		});
+	});
+}
+
+//修改用户信息
+var updateProfile = function(username, query, callback){
+	mongoClient.connect(DB_CONN_STR,function(err,db){
+		var collection = db.collection(tbProfile);
+		var whereStr = {"username": username};
+		var updateStr = {$set: {
+			email: query.email, 
+			phone: query.phone,
+			job: query.job,
+			address: query.address,
+			aboutme: query.aboutme
+		}};
+		collection.update(whereStr, updateStr, {upsert: true}, function(err,result){
+			callback(err, result);
+			db.close();
+		})
 	});
 }
 
@@ -130,6 +161,8 @@ module.exports = {
 	limitLists: limitLists,
 	findUser: findUser,
 	addUser: addUser,
+	getProfile: getProfile,
+	updateProfile: updateProfile,
 	addBlog: addBlog,
 	blogDetail: blogDetail,
 	list: list,

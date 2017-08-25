@@ -40,15 +40,13 @@ router.get('/index.html', function(req, res, next) {
 //主页
 router.get('/lists', function(req, res, next) {
 	if(check.checkPageIsLegal(req.query.page)){
-		var loginStat,loginUrl,loginLogoClass;
+		var loginStat,loginUrl;
 		if(check.isLogin(req)){
 			loginUrl = "/users/logout";
-			loginStat = req.cookies.username;
-			loginLogoClass = '<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>';
+			loginStat = "Logout";
 		} else {
 			loginUrl = "/users/login.html";
-			loginStat = "个人主页";
-			loginLogoClass = '<i class="fa fa-user-circle-o fa-stack-1x fa-inverse"></i>';
+			loginStat = "Login";
 		}
 		mdb.list(req.query.page, function(err, result){
 			if(err){
@@ -61,8 +59,7 @@ router.get('/lists', function(req, res, next) {
 					page: 1,
 					num: 0,
 					loginStat: loginStat, 
-					loginUrl: loginUrl,
-					loginLogoClass: loginLogoClass
+					loginUrl: loginUrl
 				});
 				return;
 			}
@@ -78,8 +75,7 @@ router.get('/lists', function(req, res, next) {
 						page: page, 
 						num: check.isValid(result2) ? 1 : 0,
 						loginStat: loginStat, 
-						loginUrl: loginUrl,
-						loginLogoClass: loginLogoClass
+						loginUrl: loginUrl
 					});
 				});
 			});
@@ -97,20 +93,17 @@ router.get('/detail', function(req, res, next) {
 			return;
 		}
 		if(check.isValid(result)){
-			var loginStat,loginUrl,loginLogoClass;
+			var loginStat,loginUrl;
 			if(check.isLogin(req)){
 				loginUrl = "/users/logout";
-				loginStat = req.cookies.username;
-				loginLogoClass = '<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>';
+				loginStat = "Logout";
 			} else {
 				loginUrl = "/users/login.html";
-				loginStat = "个人主页";
-				loginLogoClass = '<i class="fa fa-user-circle-o fa-stack-1x fa-inverse"></i>';
+				loginStat = "Login";
 			}
 			res.render('detail', {
 				loginStat: loginStat,
 				loginUrl: loginUrl,
-				loginLogoClass: loginLogoClass,
 				result: result[0],
 				page: check.checkPageIsLegal(req.query.page) ? 
 				req.query.page : '1',
