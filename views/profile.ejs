@@ -8,7 +8,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>New blog</title>
+	<title>Profile</title>
 
 	<!-- Bootstrap Core CSS -->
 	<link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -44,22 +44,15 @@
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				Menu <i class="fa fa-bars"></i>
 			</button>
-			<% var returnPath = "/lists?page=" + page%>
-			<a href=<%=returnPath%>>
-				<span class="fa-stack fa-lg">
-					<i class="fa fa-circle fa-stack-2x"></i>
-					<i class="fa fa-arrow-left fa-stack-1x fa-inverse"></i>
-				</span>
-			</a>
-			<a class="navbar-brand page-scroll" href=<%=returnPath%>>Return</a>
+			<a href="/">
+						<span class="fa-stack fa-lg">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-home fa-stack-1x fa-inverse"></i>
+						</span>
+					</a>
+			<a class="navbar-brand page-scroll" href="/">Home</a>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="nav-link page-scroll" href="/index.html">Home</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link page-scroll" href="/users/profile">Your profile</a>
-					</li>
 					<li class="nav-item">
 						<a class="nav-link page-scroll" href=<%=loginUrl%>><%=loginStat%></a>
 					</li>
@@ -69,12 +62,13 @@
 	</nav>
 
 	<!-- Page Header -->
-	<header class="intro-header" style="background-image: url('../img/contact-bg.jpg')">
+	<header class="intro-header" style="background-image: url('../img/about-bg.jpg')">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
 					<div class="page-heading">
-						<h1>New blog</h1>
+						<h1>About Me</h1>
+						<span class="subheading">This is what I do.</span>
 					</div>
 				</div>
 			</div>
@@ -85,25 +79,55 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-				<form action="/users/new" method="POST">
+				<!-- <form action="/users/save" method="POST"> -->
 					<div class="control-group">
 						<div class="form-group floating-label-form-group controls">
-							<label>Title</label>
-							<input type="text" class="form-control" placeholder="Title" id="name" name="title" required data-validation-required-message="Please write something.">
+							<label>Username</label>
+							Username: <input type="text" class="form-control" id="name" name="username" required data-validation-required-message="Please enter your username." readonly="true" value=<%=username%>>
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+				<form action="/users/save" method="POST">
+					<div class="control-group">
+						<div class="form-group floating-label-form-group controls">
+							<label>E-mail</label>
+							<input type="text" class="form-control" placeholder="E-mail" id="name" name="email" value=<%=result.email%>>
 							<p class="help-block text-danger"></p>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="form-group floating-label-form-group controls">
-							<label>Content</label>
-							<textarea rows="5" class="form-control" placeholder="Content" id="message" name="content" required data-validation-required-message="Please write something."></textarea>
+							<label>Phone</label>
+							<input type="text" class="form-control" placeholder="Phone" id="name" name="phone" value=<%=result.phone%>>
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="form-group floating-label-form-group controls">
+							<label>Job</label>
+							<input type="text" class="form-control" placeholder="Job" id="name" name="job" value=<%=result.job%>>
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="form-group floating-label-form-group controls">
+							<label>Address</label>
+							<input type="text" class="form-control" placeholder="Address" id="name" name="address" value=<%=result.address%>>
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="form-group floating-label-form-group controls">
+							<label>About me</label>
+							<textarea rows="5" class="form-control" placeholder="About me" id="message" name="aboutme"><%=result.aboutme%></textarea>
 							<p class="help-block text-danger"></p>
 						</div>
 					</div>
 					<br>
+					<br>
 					<div id="success"></div>
 					<div class="form-group">
-						<button type="submit" class="btn btn-secondary float-right">Submit</button>
+						<button type="submit" class="btn btn-secondary float-right">Save</button>
 					</div>
 				</form>
 			</div>
@@ -127,7 +151,7 @@
 							</a>
 						</li>
 					</ul>
-					<p class="copyright text-muted">New</p>
+					<p class="copyright text-muted">About me</p>
 				</div>
 			</div>
 		</div>
@@ -141,10 +165,6 @@
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="../lib/bootstrap/js/bootstrap.min.js"></script>
-
-	<!-- Contact Form JavaScript -->
-	<script src="../js/jqBootstrapValidation.js"></script>
-	<script src="../js/contact_me.js"></script>
 
 	<!-- Theme JavaScript -->
 	<script src="../js/clean-blog.min.js"></script>

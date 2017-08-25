@@ -44,21 +44,24 @@
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				Menu <i class="fa fa-bars"></i>
 			</button>
-			<a href=<%=loginUrl%>>
+			<% var cancle = "/lists?page=" + page%>
+			<a href=<%=cancle%>>
 				<span class="fa-stack fa-lg">
 					<i class="fa fa-circle fa-stack-2x"></i>
-					<%-loginLogoClass%>
+					<i class="fa fa-arrow-left fa-stack-1x fa-inverse"></i>
 				</span>
 			</a>
-			<a class="navbar-brand page-scroll" href="/users/profile"><%=loginStat%></a>
+			<a class="navbar-brand page-scroll" href=<%=cancle%>>Return</a>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
 						<a class="nav-link page-scroll" href="/index.html">Home</a>
 					</li>
 					<li class="nav-item">
-						<% var cancle = "/lists?page=" + page%>
-						<a class="nav-link page-scroll" href=<%=cancle%>>Cancle</a>
+						<a class="nav-link page-scroll" href="/users/profile">Your profile</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link page-scroll" href=<%=loginUrl%>><%=loginStat%></a>
 					</li>
 				</ul>
 			</div>
@@ -87,14 +90,14 @@
 					<div class="control-group">
 						<div class="form-group floating-label-form-group controls">
 							<label>Title</label>
-							<input type="text" class="form-control" placeholder="Title" id="name" name="title" required data-validation-required-message="Please write something." value=<%=title%>>
+							Title: <input type="text" class="form-control" placeholder="Title" id="name" name="title" required data-validation-required-message="Please write something." value=<%=title%>>
 							<p class="help-block text-danger"></p>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="form-group floating-label-form-group controls">
 							<label>Content</label>
-							<textarea rows="5" class="form-control" placeholder="Content" id="message" name="content" required data-validation-required-message="Please write something."><%=content%></textarea>
+							Content: <textarea rows="5" class="form-control" placeholder="Content" id="message" name="content" required data-validation-required-message="Please write something."><%=content%></textarea>
 							<p class="help-block text-danger"></p>
 						</div>
 					</div>
