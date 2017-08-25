@@ -22,6 +22,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('*', function(req, res, next){
+		// 设置跨域访问
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header("Access-Control-Allow-Headers", "X-Requested-With, auth");
+		res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+		res.header("X-Powered-By",' NIGHTCH@EXPRESS'); 
+		//res.header("Content-Type", "application/json;charset=utf-8");
+		res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+
+		if(req.method === "OPTIONS") {
+			res.sendStatus(200);
+		} else {
+			 next();
+		}
+}); 
+
 app.use('/', index);
 app.use('/users', users);
 

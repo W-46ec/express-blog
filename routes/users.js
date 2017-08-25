@@ -148,7 +148,21 @@ router.post('/*', function(req, res, next) {
 
 //新增博客页面
 router.get('/new.html', function(req, res, next) {
-	res.render('new');
+	var loginStat,loginUrl,loginLogoClass;
+	if(check.isLogin(req)){
+		loginUrl = "/users/logout";
+		loginStat = req.cookies.username;
+		loginLogoClass = '<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>';
+	} else {
+		loginUrl = "/users/login.html";
+		loginStat = "个人主页";
+		loginLogoClass = '<i class="fa fa-user-circle-o fa-stack-1x fa-inverse"></i>';
+	}
+	res.render('new', {
+		loginStat: loginStat, 
+		loginUrl: loginUrl,
+		loginLogoClass: loginLogoClass
+	});
 });
 
 //新增博客操作
@@ -192,11 +206,24 @@ router.get('/edit.html', function(req, res, next) {
 		}
 		if(check.isValid(result)){
 			if(check.checkAuthor(req, result)){
+				var loginStat,loginUrl,loginLogoClass;
+				if(check.isLogin(req)){
+					loginUrl = "/users/logout";
+					loginStat = req.cookies.username;
+					loginLogoClass = '<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>';
+				} else {
+					loginUrl = "/users/login.html";
+					loginStat = "个人主页";
+					loginLogoClass = '<i class="fa fa-user-circle-o fa-stack-1x fa-inverse"></i>';
+				}
 				var title = result[0].title;
 				var content = result[0].content;
 				var page = req.query.page;
 				var id = req.query.id;
 				res.render('edit', {
+					loginStat: loginStat,
+					loginUrl: loginUrl,
+					loginLogoClass: loginLogoClass,
 					title: title, 
 					content: content, 
 					page: page, 
