@@ -284,18 +284,26 @@ router.get('/profile', function(req, res, next) {
 			return;
 		}
 		if(check.isValid(result)){
-			var loginStat,loginUrl;
-			if(check.isLogin(req)){
-				loginUrl = "/users/logout";
-				loginStat = "Logout";
-			} else {
-				loginUrl = "/users/login.html";
-				loginStat = "Login";
-			}
 			res.render('profile', {
-				loginStat: loginStat, 
-				loginUrl: loginUrl,
 				username: req.cookies.username,
+				result: result[0]
+			});
+		} else {
+			message.error404(res);
+		}
+	});
+});
+
+//个人信息页面-只读
+router.get('/profiles', function(req, res, next) {
+	mdb.getProfile(req.query.username, function(err, result){
+		if(err){
+			message.dbError(res);
+			return;
+		}
+		if(check.isValid(result)){
+			res.render('profile_readonly', {
+				username: req.query.username,
 				result: result[0]
 			});
 		} else {
