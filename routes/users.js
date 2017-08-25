@@ -35,11 +35,7 @@ router.post('/login', function(req, res, next) {
 			return;
 		}
 		if(result.length === 0){
-			res.render('msg', {
-				title: 'Wrong', 
-				text: 'Username does not exist!', 
-				path: '/users/login.html'
-			});
+			message.loginMsg(res);
 		} else {
 			//HMACSHA256方式加盐
 			var pwdSalt = crypto.pbkdf2Sync(
@@ -51,17 +47,9 @@ router.post('/login', function(req, res, next) {
 			).toString('hex');
 			if(result[0].pwd === pwdSalt){
 				auth.cookies(req, res, req.body);
-				res.render('msg', {
-					title: 'Success', 
-					text: 'Welcome!', 
-					path: '/lists'
-				});
+				message.succMsg(res);
 			} else {
-				res.render('msg', {
-					title: 'Wrong', 
-					text: 'Wrong password!', 
-					path: '/users/login.html'
-				});
+				message.loginMsg(res);
 			}
 		}
 	});
@@ -102,28 +90,26 @@ router.post('/register', function(req, res, next) {
 					}
 					if(check.isValid(result)){
 						auth.cookies(req, res, req.body);
-						res.render('msg', {
-							title: 'Success', 
-							text: 'Success!', 
-							path: '/lists'
-						});
+						message.succMsg(res);
 					} else {
 						message.dbError(res);
 					}
 				});
 			} else {
-				res.render('msg', {
-					title: 'Wrong', 
-					text: 'Please reconfirm your password!', 
-					path: '/users/register.html'
-				});
+				message.message(
+					res, 
+					'Wrong',
+					'Please confirm your password!',
+					'/users/register.html'
+				);
 			}
 		} else {
-			res.render('msg', {
-				title: 'Wrong', 
-				text: 'Username has already exist!', 
-				path: '/users/register.html'
-			});
+			message.message(
+				res, 
+				'Wrong',
+				'Username is already taken!',
+				'/users/register.html'
+			);
 		}
 	});
 });
@@ -168,11 +154,12 @@ router.get('/new.html', function(req, res, next) {
 //新增博客操作
 router.post('/new', function(req, res, next){
 	if(req.body.title.trim().length === 0 || req.body.content.trim().length === 0){
-		res.render('msg', {
-			title: 'Wrong', 
-			text: 'Title and content cannot be empty!', 
-			path: '/users/new.html'
-		});
+		message.message(
+			res, 
+			'Sorry',
+			'Title and content should not be empty!',
+			'/users/new.html'
+		);
 	} else {
 		mdb.addBlog(req, function(err, result){
 			if(err){
@@ -180,18 +167,9 @@ router.post('/new', function(req, res, next){
 				return;
 			}
 			if(check.isValid(result)){
-				res.render('msg', {
-					title: 'Success', 
-					text: 'Success!', 
-					path: '/lists'
-				});
+				message.succMsg(res);
 			} else {
-				res.status(500);
-				res.render('msg', {
-					title: 'Error', 
-					text: 'Error!', 
-					path: '/lists'
-				});
+				message.dbError(res);
 			}
 		});
 	}
@@ -230,11 +208,7 @@ router.get('/edit.html', function(req, res, next) {
 					id: id
 				});
 			} else {
-				res.render('msg', {
-					title: 'Access denied', 
-					text: 'Access denied!', 
-					path: '/lists'
-				});
+				message.accessDeniedMsg(res);
 			}
 		} else {
 			message.error404(res);
@@ -257,21 +231,13 @@ router.post('/edit', function(req, res, next){
 						return;
 					}
 					if(check.isValid(result2)){
-						res.render('msg', {
-							title: 'Success', 
-							text: 'Success!', 
-							path: '/lists'
-						});
+						message.succMsg(res);
 					} else {
 						message.dbError(res);
 					}
 				});
 			} else {
-				res.render('msg', {
-					title: 'Access denied', 
-					text: 'Access denied!', 
-					path: '/lists'
-				});
+				message.accessDeniedMsg(res);
 			}
 		} else {
 			message.error404(res);
@@ -294,21 +260,13 @@ router.get('/delete', function(req, res, next){
 						return;
 					}
 					if(check.isValid(result2)){
-						res.render('msg', {
-							title: 'Success', 
-							text: 'Success!', 
-							path: '/lists'
-						});
+						message.succMsg(res);
 					} else {
 						message.dbError(res);
 					}
 				});
 			} else {
-				res.render('msg', {
-					title: 'Access denied', 
-					text: 'Access denied!', 
-					path: '/lists'
-				});
+				message.accessDeniedMsg(res);
 			}
 		} else {
 			message.error404(res);
