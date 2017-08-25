@@ -2,17 +2,15 @@
 var dbError = function(res){
 	res.status(500);
 	res.render('msg', {
-		title: 'Error', 
-		text: 'Error!', 
+		title: "Error",
+		text: "Error",
 		path: '/lists'
 	});
 }
 
 var error404 = function(res){
 	res.status(404);
-	res.render('msg', {
-		title: 'Error', 
-		text: 'Not found!', 
+	res.render('err404', {
 		path: '/lists'
 	});
 }

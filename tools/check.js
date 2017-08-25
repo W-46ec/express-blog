@@ -35,20 +35,23 @@ var checkNextPage = function(res, req, result, callback){
 		callback();
 	} else if(isValid(result) < limitLists){
 		var page = parseInt(req.query.page);
-		var loginStat,loginUrl;
+		var loginStat,loginUrl,loginLogoClass;
 		if(isLogin(req)){
 			loginUrl = "/users/logout";
-			loginStat = req.cookies.username + "	Logout";
+			loginStat = req.cookies.username;
+			loginLogoClass = '<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>';
 		} else {
 			loginUrl = "/users/login.html";
-			loginStat = "Login";
+			loginStat = "个人主页";
+			loginLogoClass = '<i class="fa fa-user-circle-o fa-stack-1x fa-inverse"></i>';
 		}
 		res.render('lists', {
 			lists: result, 
 			page: page, 
 			num: 0, 
 			loginStat: loginStat, 
-			loginUrl: loginUrl
+			loginUrl: loginUrl,
+			loginLogoClass: loginLogoClass
 		});
 	}
 }

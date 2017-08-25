@@ -65,7 +65,7 @@ var list = function(page, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbBlog);
 		var skip = (parseInt(page) - 1) * limitLists;
-		collection.find({}).limit(limitLists).skip(skip).toArray(function(err, result){
+		collection.find({}).sort({"date":-1}).limit(limitLists).skip(skip).toArray(function(err, result){
 			callback(err, result);
 			db.close();
 		});
