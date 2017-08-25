@@ -100,7 +100,8 @@
 							
 						</h3>
 					</a>
-					<p class="post-meta">Posted by <a href="#"><%= element.username %></a> on <%= element.date %></p>
+					<% var userProfile = "/users/profiles?username=" + element.username; %>
+					<p class="post-meta">Posted by <a href=<%=userProfile%>><%= element.username %></a> on <%= element.date %></p>
 				</div>
 				<% }); %>
 				<hr>

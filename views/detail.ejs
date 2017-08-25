@@ -80,7 +80,8 @@
 				<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
 					<div class="post-heading">
 						<h1><%=result.title%></h1>
-						<span class="meta">Posted by <a href="/users/profile"><%=result.username%></a> on <%=result.date%></span>
+						<% var userProfile = "/users/profiles?username=" + result.username; %>
+						<span class="meta">Posted by <a href=<%=userProfile%>><%=result.username%></a> on <%=result.date%></span>
 					</div>
 				</div>
 			</div>
