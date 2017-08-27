@@ -11,15 +11,15 @@
 	<title>Blog</title>
 
 	<!-- Bootstrap Core CSS -->
-	<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Additional fonts for this theme -->
-	<link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="/../lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 	<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
 	<!-- Custom styles for this theme -->
-	<link href="css/clean-blog.min.css" rel="stylesheet">
+	<link href="/../css/clean-blog.min.css" rel="stylesheet">
 
 	<!-- Temporary navbar container fix until Bootstrap 4 is patched -->
 	<style>
@@ -56,9 +56,8 @@
 					<li class="nav-item">
 						<a class="nav-link page-scroll" href="index.html">Home</a>
 					</li>
-					<% var newPath = "/users/new.html?&page=" + page; %>
 					<li class="nav-item">
-						<a class="nav-link page-scroll" href=<%=newPath%>>New</a>
+						<a class="nav-link page-scroll" href="/users/blog/new.html">New</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link page-scroll" href="/users/profile">Your profile</a>
@@ -72,7 +71,7 @@
 	</nav>
 
 	<!-- Page Header -->
-	<header class="intro-header" style="background-image: url('img/home-bg.jpg')">
+	<header class="intro-header" style="background-image: url('/../img/home-bg.jpg')">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
@@ -90,7 +89,7 @@
 		<div class="row">
 			<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
 				<% lists.forEach(function(element,index,its){ %>
-				<% var path = "/detail?id=" + element.id + "&page=" + page; %>
+				<% var path = "/detail?id=" + element.id; %>
 				<div class="post-preview">
 					<a href=<%=path%>>
 						<h2 class="post-title">
@@ -108,8 +107,8 @@
 				<!-- Pager -->
 				<center><p>page <%=page%></p></center>
 				<div class="clearfix">
-					<% var lastPage = "/lists?page=" + (page - 1).toString(); %>
-					<% var nextPage = "/lists?page=" + (page + num).toString(); %>
+					<% var lastPage = "/home?page=" + (page - 1).toString(); %>
+					<% var nextPage = "/home?page=" + (page + num).toString(); %>
 					<a class="btn btn-secondary float-left" href=<%=lastPage%>>&larr; 上一页</a>
 					<a class="btn btn-secondary float-right" href=<%=nextPage%>>下一页 &rarr;</a>
 				</div>
@@ -134,7 +133,6 @@
 							</a>
 						</li>
 					</ul>
-					<!-- <p class="copyright text-muted">Copyright &copy; Your Website 2017. More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p> -->
 					<p class="copyright text-muted">Home</p>
 				</div>
 			</div>
@@ -142,16 +140,16 @@
 	</footer>
 
 	<!-- jQuery Version 3.1.1 -->
-	<script src="lib/jquery/jquery.js"></script>
+	<script src="/../lib/jquery/jquery.js"></script>
 
 	<!-- Tether -->
-	<script src="lib/tether/tether.min.js"></script>
+	<script src="/../lib/tether/tether.min.js"></script>
 
 	<!-- Bootstrap Core JavaScript -->
-	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/../lib/bootstrap/js/bootstrap.min.js"></script>
 
 	<!-- Theme JavaScript -->
-	<script src="js/clean-blog.min.js"></script>
+	<script src="/../js/clean-blog.min.js"></script>
 
 </body>
 

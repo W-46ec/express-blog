@@ -8,7 +8,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Login</title>
+	<title>Change password</title>
 
 	<!-- Bootstrap Core CSS -->
 	<link href="/../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -41,7 +41,7 @@
 	<!-- Navigation -->
 	<nav class="navbar fixed-top navbar-toggleable-md navbar-light" id="mainNav">
 		<div class="container">
-			<a class="navbar-brand page-scroll" href="/index.html">Return</a>
+			<a class="navbar-brand page-scroll" href="/users/profile">Return</a>
 		</div>
 	</nav>
 
@@ -51,7 +51,7 @@
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
 					<div class="page-heading">
-						<h2>Login</h2>
+						<h2></h2>
 					</div>
 				</div>
 			</div>
@@ -62,18 +62,32 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-				<form action="/users/login" method="POST">
+				<form action="/users/password/reset" method="POST">
 					<div class="control-group">
 						<div class="form-group floating-label-form-group controls">
 							<label>Username</label>
-							<input type="text" class="form-control" placeholder="username" id="name" name="username" required data-validation-required-message="Please enter your username.">
+							Username: <input type="text" class="form-control" id="name" name="username" readonly="true" value=<%=username%>>
 							<p class="help-block text-danger"></p>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="form-group col-xs-12 floating-label-form-group controls">
-							<label>Password</label>
-							<input type="password" class="form-control" placeholder="password" id="phone" name="pwd" required data-validation-required-message="Please enter your password.">
+							<label>Old password</label>
+							<input type="password" class="form-control" placeholder="Old password" id="phone" name="oldpwd" required data-validation-required-message="Please enter your old password.">
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="form-group col-xs-12 floating-label-form-group controls">
+							<label>New password</label>
+							<input type="password" class="form-control" placeholder="New password" id="phone" name="pwd" required data-validation-required-message="Please enter your new password.">
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="form-group col-xs-12 floating-label-form-group controls">
+							<label>Confirm password</label>
+							<input type="password" class="form-control" placeholder="Confirm password" id="phone" name="confirmpwd" required data-validation-required-message="Please confirm your new password.">
 							<p class="help-block text-danger"></p>
 						</div>
 					</div>
@@ -81,8 +95,7 @@
 					<br>
 					<div id="success"></div>
 					<div class="form-group">
-						<button type="submit" class="btn btn-secondary float-left">Login</button>
-						<button class="btn btn-secondary float-right" onclick="location='/register.html'">Register</button>
+						<button type="submit" class="btn btn-secondary float-right">OK</button>
 					</div>
 				</form>
 			</div>
@@ -96,7 +109,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-					<p class="copyright text-muted">Login</p>
+					<p class="copyright text-muted">Change password</p>
 				</div>
 			</div>
 		</div>

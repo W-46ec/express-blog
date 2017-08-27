@@ -31,16 +31,21 @@ router.post('/*', function(req, res, next){
 
 //主页
 router.get('/', function(req, res, next) {
-	res.redirect('/lists');
+	res.redirect('/home');
 });
 
 //主页
 router.get('/index.html', function(req, res, next) {
-	res.redirect('/lists');
+	res.redirect('/home');
 });
 
 //主页
 router.get('/lists', function(req, res, next) {
+	res.redirect('/home');
+});
+
+//主页
+router.get('/home', function(req, res, next) {
 	if(check.checkPageIsLegal(req.query.page)){
 		var loginStat,loginUrl;
 		if(check.isLogin(req)){
@@ -50,7 +55,7 @@ router.get('/lists', function(req, res, next) {
 			loginUrl = "/users/login.html";
 			loginStat = "Login";
 		}
-		mdb.list(req.query.page, function(err, result){
+		mdb.list({}, req.query.page, function(err, result){
 			if(err){
 				message.dbError(res);
 				return;
@@ -66,7 +71,7 @@ router.get('/lists', function(req, res, next) {
 				return;
 			}
 			check.checkNextPage(res, req, result, function(){
-				mdb.list((parseInt(req.query.page) + 1).toString(), function(err, result2){
+				mdb.list({}, (parseInt(req.query.page) + 1).toString(), function(err, result2){
 					if(err){
 						message.dbError(res);
 						return;
@@ -83,7 +88,7 @@ router.get('/lists', function(req, res, next) {
 			});
 		});
 	} else {
-		res.redirect("/lists?page=1");
+		res.redirect("/home?page=1");
 	}
 });
 
@@ -109,8 +114,6 @@ router.get('/detail', function(req, res, next) {
 				loginUrl: loginUrl,
 				result: result[0],
 				content: content,
-				page: check.checkPageIsLegal(req.query.page) ? 
-				req.query.page : '1',
 				id: req.query.id
 			});
 		} else {

@@ -27,7 +27,7 @@ var checkPageIsLegal = function(page){
 	}
 }
 
-//检测下一页
+//检测下一页-首页
 var checkNextPage = function(res, req, result, callback){
 	if(isValid(result) === 0){
 		res.redirect("/lists?page=1");
@@ -45,7 +45,34 @@ var checkNextPage = function(res, req, result, callback){
 		}
 		res.render('lists', {
 			lists: result, 
-			page: page, 
+			page: page,
+			num: 0, 
+			loginStat: loginStat, 
+			loginUrl: loginUrl,
+			loginLogoClass: loginLogoClass
+		});
+	}
+}
+
+//检测下一页-Article
+var checkArticleNextPage = function(res, req, result, callback){
+	if(isValid(result) === 0){
+		res.redirect("/users/article?page=1");
+	} else if(isValid(result) >= limitLists) {
+		callback();
+	} else if(isValid(result) < limitLists){
+		var page = parseInt(req.query.page);
+		var loginStat,loginUrl,loginLogoClass;
+		if(isLogin(req)){
+			loginUrl = "/users/logout";
+			loginStat = "Logout";
+		} else {
+			loginUrl = "/users/login.html";
+			loginStat = "Login";
+		}
+		res.render('article', {
+			lists: result, 
+			page: page,
 			num: 0, 
 			loginStat: loginStat, 
 			loginUrl: loginUrl,
@@ -91,6 +118,7 @@ module.exports = {
 	checkPageIsLegal: checkPageIsLegal,
 	isValid: isValid,
 	checkNextPage: checkNextPage,
+	checkArticleNextPage: checkArticleNextPage,
 	isLogin: isLogin,
 	checkAuthor: checkAuthor
 }
