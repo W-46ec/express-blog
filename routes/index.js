@@ -1,4 +1,6 @@
 var express = require('express');
+var markdown = require('markdown-js');
+
 var check = require('../tools/check.js');
 var mdb = require('../tools/db.js');
 var message = require('../tools/msg.js');
@@ -101,10 +103,12 @@ router.get('/detail', function(req, res, next) {
 				loginUrl = "/users/login.html";
 				loginStat = "Login";
 			}
+			var content = markdown.makeHtml(result[0].content);
 			res.render('detail', {
 				loginStat: loginStat,
 				loginUrl: loginUrl,
 				result: result[0],
+				content: content,
 				page: check.checkPageIsLegal(req.query.page) ? 
 				req.query.page : '1',
 				id: req.query.id
