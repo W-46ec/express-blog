@@ -93,7 +93,9 @@ router.post('/register', function(req, res, next) {
 							message.dbError(res);
 							return;
 						}
-						if(check.isValid(result)){
+						if(check.isValid(result) &&
+							result.result.n === 1 &&
+							result2.result.n === 1){
 							auth.cookies(req, res, req.body);
 							message.succMsg(res);
 						} else {
@@ -171,7 +173,8 @@ router.post('/new', function(req, res, next){
 				message.dbError(res);
 				return;
 			}
-			if(check.isValid(result)){
+			if(check.isValid(result) &&
+				result.result.n === 1){
 				message.succMsg(res);
 			} else {
 				message.dbError(res);
@@ -232,7 +235,8 @@ router.post('/edit', function(req, res, next){
 						message.dbError(res);
 						return;
 					}
-					if(check.isValid(result2)){
+					if(check.isValid(result2) &&
+						result2.result.nModified === 1){
 						message.succMsg(res);
 					} else {
 						message.dbError(res);
@@ -261,7 +265,8 @@ router.get('/delete', function(req, res, next){
 						message.dbError(res);
 						return;
 					}
-					if(check.isValid(result2)){
+					if(check.isValid(result2) &&
+						result2.result.n === 1){
 						message.succMsg(res);
 					} else {
 						message.dbError(res);
@@ -325,7 +330,8 @@ router.post('/save', function(req, res, next) {
 						message.dbError(res);
 						return;
 					}
-					if(check.isValid(result2)){
+					if(check.isValid(result2) &&
+						result2.result.nModified === 1){
 						message.succMsg(res);
 					} else {
 						message.dbError(res);

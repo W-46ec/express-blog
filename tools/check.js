@@ -38,12 +38,10 @@ var checkNextPage = function(res, req, result, callback){
 		var loginStat,loginUrl,loginLogoClass;
 		if(isLogin(req)){
 			loginUrl = "/users/logout";
-			loginStat = req.cookies.username;
-			loginLogoClass = '<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>';
+			loginStat = "Logout";
 		} else {
 			loginUrl = "/users/login.html";
-			loginStat = "个人主页";
-			loginLogoClass = '<i class="fa fa-user-circle-o fa-stack-1x fa-inverse"></i>';
+			loginStat = "Login";
 		}
 		res.render('lists', {
 			lists: result, 
