@@ -14,7 +14,7 @@ var dbError = function(res){
 	res.render('msg', {
 		title: "Error",
 		text: "Error",
-		path: '/lists'
+		path: '/home'
 	});
 }
 
@@ -22,7 +22,7 @@ var dbError = function(res){
 var error404 = function(res){
 	res.status(404);
 	res.render('err404', {
-		path: '/lists'
+		path: '/home'
 	});
 }
 
@@ -42,7 +42,7 @@ var succMsg = function(res){
 	res.render('msg', {
 		title: 'Success', 
 		text: 'Success!', 
-		path: '/lists'
+		path: '/home'
 	});
 }
 
@@ -52,7 +52,7 @@ var accessDeniedMsg = function(res){
 	res.render('msg', {
 		title: 'Access denied', 
 		text: 'Access denied!', 
-		path: '/lists'
+		path: '/home'
 	});
 }
 

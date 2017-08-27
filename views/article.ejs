@@ -8,7 +8,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>New blog</title>
+	<title>Articles</title>
 
 	<!-- Bootstrap Core CSS -->
 	<link href="/../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -44,20 +44,20 @@
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				Menu <i class="fa fa-bars"></i>
 			</button>
-			<a href="javascript: history.back();">
+			<a href="/users/profile">
 				<span class="fa-stack fa-lg">
 					<i class="fa fa-circle fa-stack-2x"></i>
 					<i class="fa fa-arrow-left fa-stack-1x fa-inverse"></i>
 				</span>
 			</a>
-			<a class="navbar-brand page-scroll" href="javascript: history.back();">Return</a>
+			<a class="navbar-brand page-scroll" href="/users/profile">Return</a>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
 						<a class="nav-link page-scroll" href="/index.html">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link page-scroll" href="/users/profile">Your profile</a>
+						<a class="nav-link page-scroll" href="/users/blog/new.html">New</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link page-scroll" href=<%=loginUrl%>><%=loginStat%></a>
@@ -68,12 +68,13 @@
 	</nav>
 
 	<!-- Page Header -->
-	<header class="intro-header" style="background-image: url('/../img/new.jpg'); background-repeat: no-repeat;background-size: 100% 100%">
+	<header class="intro-header" style="background-image: url('/../img/articles.jpg'); background-repeat: no-repeat;background-size: 100% 100%"">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-					<div class="page-heading">
-						<h1>New blog</h1>
+					<div class="site-heading">
+						<h1>Articles</h1>
+						<span class="subheading"></span>
 					</div>
 				</div>
 			</div>
@@ -84,27 +85,30 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-				<form action="/users/blog/new" method="POST">
-					<div class="control-group">
-						<div class="form-group floating-label-form-group controls">
-							<label>Title</label>
-							<input type="text" class="form-control" placeholder="Title" id="name" name="title" required data-validation-required-message="Please write something.">
-							<p class="help-block text-danger"></p>
-						</div>
-					</div>
-					<div class="control-group">
-						<div class="form-group floating-label-form-group controls">
-							<label>Content</label>
-							<textarea rows="15" class="form-control" placeholder="Content" id="message" name="content" required data-validation-required-message="Please write something."></textarea>
-							<p class="help-block text-danger"></p>
-						</div>
-					</div>
-					<br>
-					<div id="success"></div>
-					<div class="form-group">
-						<button type="submit" class="btn btn-secondary float-right">Submit</button>
-					</div>
-				</form>
+				<% lists.forEach(function(element,index,its){ %>
+				<% var path = "/detail?id=" + element.id + "&page=" + page; %>
+				<div class="post-preview">
+					<a href=<%=path%>>
+						<h2 class="post-title">
+							<%= element.title %>
+						</h2>
+						<h3 class="post-subtitle">
+							
+						</h3>
+					</a>
+					<% var userProfile = "/users/profiles?username=" + element.username; %>
+					<p class="post-meta">Posted by <a href=<%=userProfile%>><%= element.username %></a> on <%= element.date %></p>
+				</div>
+				<% }); %>
+				<hr>
+				<!-- Pager -->
+				<center><p>page <%=page%></p></center>
+				<div class="clearfix">
+					<% var lastPage = "/users/article?page=" + (page - 1).toString(); %>
+					<% var nextPage = "/users/article?page=" + (page + num).toString(); %>
+					<a class="btn btn-secondary float-left" href=<%=lastPage%>>&larr; 上一页</a>
+					<a class="btn btn-secondary float-right" href=<%=nextPage%>>下一页 &rarr;</a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -126,7 +130,7 @@
 							</a>
 						</li>
 					</ul>
-					<p class="copyright text-muted">New</p>
+					<p class="copyright text-muted">Article</p>
 				</div>
 			</div>
 		</div>
@@ -140,10 +144,6 @@
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="/../lib/bootstrap/js/bootstrap.min.js"></script>
-
-	<!-- Contact Form JavaScript -->
-	<script src="/../js/jqBootstrapValidation.js"></script>
-	<script src="/../js/contact_me.js"></script>
 
 	<!-- Theme JavaScript -->
 	<script src="/../js/clean-blog.min.js"></script>

@@ -6,7 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var register = require('./routes/register');
+var login = require('./routes/login');
+var profile = require('./routes/profile');
+var blog = require('./routes/blog');
+var article = require('./routes/article');
+var password = require('./routes/password');
 
 var app = express();
 
@@ -25,12 +30,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('*', function(req, res, next){
 		// 设置跨域访问
 		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "X-Requested-With, auth");
+		res.header("Access-Control-Allow-Headers", "X-Requested-With");
 		res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-		res.header("X-Powered-By",' NIGHTCH@EXPRESS'); 
-		//res.header("Content-Type", "application/json;charset=utf-8");
 		res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-
 		if(req.method === "OPTIONS") {
 			res.sendStatus(200);
 		} else {
@@ -39,7 +41,12 @@ app.use('*', function(req, res, next){
 }); 
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/', register);
+app.use('/users', login);
+app.use('/users', profile);
+app.use('/users', article);
+app.use('/users/blog', blog);
+app.use('/users/password', password);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -49,6 +49,30 @@ var addUser = function(query, callback){
 	});
 }
 
+//修改密码
+var changepwd = function(query, callback){
+	mongoClient.connect(DB_CONN_STR,function(err,db){
+		var collection = db.collection(tbUser);
+		var salt = sha256(uuid.v4());
+		var pwd = crypto.pbkdf2Sync(
+			query.pwd,
+			salt,
+			4096,
+			256,
+			'sha256'
+		).toString('hex');
+		var whereStr = {"username": query.username};
+		var updateStr = {$set: {
+			pwd: pwd,
+			salt: salt
+		}};
+		collection.update(whereStr, updateStr, function(err,result){
+			callback(err, result);
+			db.close();
+		})
+	});
+}
+
 //获取用户信息
 var getProfile = function(username, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
@@ -92,11 +116,11 @@ var blogDetail = function(query, callback){
 }
 
 //首页查询
-var list = function(page, callback){
+var list = function(query, page, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbBlog);
 		var skip = (parseInt(page) - 1) * limitLists;
-		collection.find({}).sort({"date":-1}).limit(limitLists).skip(skip).toArray(function(err, result){
+		collection.find(query).sort({"date":-1}).limit(limitLists).skip(skip).toArray(function(err, result){
 			callback(err, result);
 			db.close();
 		});
@@ -161,6 +185,7 @@ module.exports = {
 	limitLists: limitLists,
 	findUser: findUser,
 	addUser: addUser,
+	changepwd: changepwd,
 	getProfile: getProfile,
 	updateProfile: updateProfile,
 	addBlog: addBlog,

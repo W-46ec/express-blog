@@ -11,15 +11,15 @@
 	<title>Detail</title>
 
 	<!-- Bootstrap Core CSS -->
-	<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Additional fonts for this theme -->
-	<link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="/../lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 	<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
 	<!-- Custom styles for this theme -->
-	<link href="css/clean-blog.min.css" rel="stylesheet">
+	<link href="/../css/clean-blog.min.css" rel="stylesheet">
 
 	<!-- Temporary navbar container fix until Bootstrap 4 is patched -->
 	<style>
@@ -52,22 +52,21 @@
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				Menu <i class="fa fa-bars"></i>
 			</button>
-			<% var returnPath = "/lists?page=" + page%>
-			<a href=<%=returnPath%>>
+			<a href="javascript: history.back();">
 				<span class="fa-stack fa-lg">
 					<i class="fa fa-circle fa-stack-2x"></i>
 					<i class="fa fa-arrow-left fa-stack-1x fa-inverse"></i>
 				</span>
 			</a>
-			<a class="navbar-brand page-scroll" href=<%=returnPath%>>Return</a>
+			<a class="navbar-brand page-scroll" href="javascript: history.back();">Return</a>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<% var editPath = "/users/edit.html?id=" + id + "&page=" + page; %>
+						<% var editPath = "/users/blog/edit.html?id=" + id; %>
 						<a class="nav-link page-scroll" href=<%=editPath%>>Edit</a>
 					</li>
 					<li class="nav-item">
-						<% var delPath = "/users/delete?id=" + id; %>
+						<% var delPath = "/users/blog/delete?id=" + id; %>
 						<a class="nav-link page-scroll" href=<%=delPath%>>Delete</a>
 					</li>
 					<li class="nav-item">
@@ -82,7 +81,7 @@
 	</nav>
 
 	<!-- Page Header -->
-	<header class="intro-header" style="background-image: url('img/post-bg.jpg')">
+	<header class="intro-header" style="background-image: url('/../img/post-bg.jpg')">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
@@ -131,16 +130,16 @@
 	</footer>
 
 	<!-- jQuery Version 3.1.1 -->
-	<script src="lib/jquery/jquery.js"></script>
+	<script src="/../lib/jquery/jquery.js"></script>
 
 	<!-- Tether -->
-	<script src="lib/tether/tether.min.js"></script>
+	<script src="/../lib/tether/tether.min.js"></script>
 
 	<!-- Bootstrap Core JavaScript -->
-	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/../lib/bootstrap/js/bootstrap.min.js"></script>
 
 	<!-- Theme JavaScript -->
-	<script src="js/clean-blog.min.js"></script>
+	<script src="/../js/clean-blog.min.js"></script>
 
 </body>
 
