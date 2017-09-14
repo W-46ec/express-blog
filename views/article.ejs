@@ -44,13 +44,13 @@
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				Menu <i class="fa fa-bars"></i>
 			</button>
-			<a href="/users/profile">
+			<a href="/home">
 				<span class="fa-stack fa-lg">
 					<i class="fa fa-circle fa-stack-2x"></i>
 					<i class="fa fa-arrow-left fa-stack-1x fa-inverse"></i>
 				</span>
 			</a>
-			<a class="navbar-brand page-scroll" href="/users/profile">Return</a>
+			<a class="navbar-brand page-scroll" href="/home">Return</a>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
@@ -87,6 +87,7 @@
 			<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
 				<% lists.forEach(function(element,index,its){ %>
 				<% var path = "/detail?id=" + element.id + "&page=" + page; %>
+				<% var shareOpt = element.privacy === 1 ? "private" : "public"; %>
 				<div class="post-preview">
 					<a href=<%=path%>>
 						<h2 class="post-title">
@@ -97,7 +98,7 @@
 						</h3>
 					</a>
 					<% var userProfile = "/users/profiles?username=" + element.username; %>
-					<p class="post-meta">Posted by <a href="<%=userProfile%>"><%= element.username %></a> on <%= element.date %></p>
+					<p class="post-meta">Posted by <a href="<%=userProfile%>"><%= element.username %></a> on <%= element.date %> &lt<%=shareOpt%>&gt</p>
 				</div>
 				<% }); %>
 				<hr>

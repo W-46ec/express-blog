@@ -74,12 +74,14 @@ router.get('/edit.html', function(req, res, next) {
 				var title = result[0].title;
 				var content = result[0].content;
 				var id = req.query.id;
+				var privacy = result[0].privacy === 1 ? "checked" : "";
 				res.render('edit', {
 					loginStat: loginStat,
 					loginUrl: loginUrl,
 					title: title, 
 					content: content,
-					id: id
+					id: id,
+					privacy: privacy
 				});
 			} else {
 				message.accessDeniedMsg(res);
@@ -104,8 +106,7 @@ router.post('/edit', function(req, res, next){
 						message.dbError(res);
 						return;
 					}
-					if(check.isValid(result2) &&
-						result2.result.nModified === 1){
+					if(check.isValid(result2)){
 						message.succMsg(res);
 					} else {
 						message.dbError(res);

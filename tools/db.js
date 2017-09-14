@@ -36,11 +36,13 @@ var addUser = function(query, callback){
 			'sha256'
 		).toString('hex');
 		var date = new Date().toLocaleString();
+		var timestamp = +(new Date());
 		var data = [{
 			username: username, 
 			pwd: pwd, 
 			salt: salt,
-			date: date
+			date: date,
+			timestamp: timestamp
 		}];
 		collection.insert(data,function(err,result){
 			callback(err, result);
@@ -120,7 +122,7 @@ var list = function(query, page, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbBlog);
 		var skip = (parseInt(page) - 1) * limitLists;
-		collection.find(query).sort({"date":-1}).limit(limitLists).skip(skip).toArray(function(err, result){
+		collection.find(query).sort({"timestamp": -1}).limit(limitLists).skip(skip).toArray(function(err, result){
 			callback(err, result);
 			db.close();
 		});
@@ -136,13 +138,22 @@ var addBlog = function(req, callback){
 		var title = query.title;
 		var content = query.content;
 		var date = new Date().toLocaleString();
+		var timestamp = +(new Date());
 		var id = sha256(username + title + content + data);
+		var privacy;
+		if(query.privacy === undefined){
+			privacy = 0;
+		} else {
+			privacy = 1;
+		}
 		var data = [{
 			username: username, 
 			title: title, 
 			content: content, 
 			date: date, 
-			id: id
+			timestamp: timestamp,
+			id: id,
+			privacy: privacy
 		}];
 		collection.insert(data,function(err,result){
 			callback(err, result);
@@ -155,10 +166,17 @@ var addBlog = function(req, callback){
 var updateBlog = function(id, query, callback){
 	mongoClient.connect(DB_CONN_STR,function(err,db){
 		var collection = db.collection(tbBlog);
-		var whereStr = {"id":id};
-		var updateStr = {$set:{
+		var whereStr = {"id": id};
+		var privacy;
+		if(query.privacy === undefined){
+			privacy = 0;
+		} else {
+			privacy = 1;
+		}
+		var updateStr = {$set: {
 			title: query.title, 
-			content: query.content
+			content: query.content,
+			privacy: privacy
 		}};
 		collection.update(whereStr, updateStr, function(err,result){
 			callback(err, result);

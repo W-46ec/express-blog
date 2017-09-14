@@ -55,7 +55,7 @@ router.get('/home', function(req, res, next) {
 			loginUrl = "/users/login.html";
 			loginStat = "Login";
 		}
-		mdb.list({}, req.query.page, function(err, result){
+		mdb.list({privacy: 0}, req.query.page, function(err, result){
 			if(err){
 				message.dbError(res);
 				return;

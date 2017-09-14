@@ -88,7 +88,8 @@
 					<div class="post-heading">
 						<h1><%=result.title%></h1>
 						<% var userProfile = "/users/profiles?username=" + result.username; %>
-						<span class="meta">Posted by <a href=<%=userProfile%>><%=result.username%></a> on <%=result.date%></span>
+						<% var shareOpt = result.privacy === 1 ? "private" : "public"; %>
+						<span class="meta">Posted by <a href=<%=userProfile%>><%=result.username%></a> on <%=result.date%> &lt <%=shareOpt%> &gt</span>
 					</div>
 				</div>
 			</div>
