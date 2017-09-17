@@ -8,9 +8,6 @@ var auth = require('../tools/auth.js');
 var check = require('../tools/check.js');
 var message = require('../tools/msg.js');
 
-var mongoClient = mdb.mongoClient;
-var DB_CONN_STR = mdb.DB_CONN_STR;
-
 var router = express.Router();
 
 //新增博客页面

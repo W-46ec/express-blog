@@ -5,10 +5,6 @@ var check = require('../tools/check.js');
 var mdb = require('../tools/db.js');
 var message = require('../tools/msg.js');
 
-var mongoClient = mdb.mongoClient;
-var DB_CONN_STR = mdb.DB_CONN_STR;
-var limitLists = mdb.limitLists;
-
 var router = express.Router();
 
 //GET请求过滤
